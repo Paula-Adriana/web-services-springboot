@@ -3,12 +3,16 @@ package com.udemy.course.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.udemy.course.entities.pk.OrderItemPK;
 
+import jakarta.persistence.Access;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+// Classe de associação, representa o par produto/pedido
 @Entity
 @Table(name = "tb_order_item")
 public class OrderItem implements Serializable {
@@ -16,20 +20,25 @@ public class OrderItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private OrderItemPK id;
+	@JsonProperty(access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
+	// id composto
+	private OrderItemPK id = new OrderItemPK();
 	
 	private Integer quantity;
-	private Double price;
+	private Double price; // para fins de histórico
 	
 	public OrderItem() {}
 
 	public OrderItem(Order order, Product product, Integer quantity, Double price) {
+		// associando a ordem e o produto na classe OrderItemPK
+		// aqui identificado pelo atributo id 
 		id.setOrder(order);
 		id.setProduct(product);
 		this.quantity = quantity;
 		this.price = price;
 	}
 	
+	@JsonIgnore
 	public Order getOrder() {
 		return id.getOrder();
 	}

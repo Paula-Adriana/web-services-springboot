@@ -11,17 +11,20 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 // Classe auxiliar de chave primaria composta
+// possui referencia para as duas classes
 @Embeddable
 public class OrderItemPK implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne
-	@JoinColumn(name = "order_id")
+	@JoinColumn(name = "order_id") //nome da chave estrangeira no BD
 	private Order order;
 	
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
+	
+	// não possui construtor
 	
 	public Order getOrder() {
 		return order;
